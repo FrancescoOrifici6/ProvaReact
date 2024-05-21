@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import _ from 'lodash'; // Import entire lodash library
 
 
 function CityCard({ onUpdate, city, onRemove }) {
