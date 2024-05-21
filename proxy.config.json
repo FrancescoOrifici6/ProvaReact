@@ -1,0 +1,11 @@
+{
+    "/cope/*": {
+        "target": "http://cont.multidatagroup.it/cope/api/cope/v1",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true,
+        "pathRewrite": {
+            "^/cope": ""
+        }
+    }
+}
