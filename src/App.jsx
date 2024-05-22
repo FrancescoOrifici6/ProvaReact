@@ -5,27 +5,16 @@ import Menu from './components/root-comp/menu';
 import { setAuthorizationToken } from './interceptor/axiosInterceptor';
 import { BrowserRouter, createBrowserRouter, Route, Router, RouterProvider, Routes } from 'react-router-dom';
 import Users from './components/pages/Users';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { setLoggedUser } from './store/slices/userSlice';
+import Topbar from './components/root-comp/topbar';
 
 
 function App() {
 
 
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <div> AAAA </div>,
-    },
-    {
-      path: "/users",
-      element: <div> users </div>,
-    },
-  ]);
-
-
-
-
-
-
+  const dispatchLoggedUser = useDispatch()
 
   const [logged, setLogged] = useState(false);
 
@@ -36,14 +25,33 @@ function App() {
     if (currentToken) {
       setAuthorizationToken(currentToken);
       setLogged(true);
+      storeUser();
     }
   }, []);
 
 
 
 
+  const storeUser = () => {
+
+    axios.get('cope/COPE/odl/getUser')
+      .then((response) => {
+        dispatchLoggedUser(setLoggedUser(response.data));
+      })
+      .catch((error) => {
+        alert('Errore durante la chiamata HTTP:', error);
+      });
+
+
+
+  }
+
+
+
+
   const updateLogin = () => {
     setLogged(true)
+    storeUser();
   }
 
 
@@ -58,16 +66,19 @@ function App() {
     return (
       <BrowserRouter>
         <div className='app-container'>
-          <div className='menu'>
-            <Menu />
-          </div>
-          <div className='container'>
-            <Routes>
-              <Route path='/' element={<h1>home</h1>} />
-              <Route path='/1' element={<h1>1</h1>} />
-              <Route path='/2' element={<h1>2</h1>} />
-              <Route path='/users' element={<Users />} />
-            </Routes>
+          <Topbar />
+          <div className='custom-container'>
+            <div className='menu'>
+              <Menu />
+            </div>
+            <div className='container'>
+              <Routes>
+                <Route path='/' element={<h1>home</h1>} />
+                <Route path='/1' element={<h1>1</h1>} />
+                <Route path='/2' element={<h1>2</h1>} />
+                <Route path='/users' element={<Users />} />
+              </Routes>
+            </div>
           </div>
         </div>
       </BrowserRouter>
