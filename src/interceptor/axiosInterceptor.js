@@ -7,7 +7,7 @@ export function setAuthorizationToken(token) {
 
   axios.interceptors.request.use(
     (config) => {
-      console.log('intercept', config);
+      // console.log('intercept', config);
       if (token) {
         config.headers.Authorization = `${token}`;
       } else {
