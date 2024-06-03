@@ -3,23 +3,15 @@ import { getMenu } from '../../services/menu.service';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
 
-export default function Menu() {
+
+export default function Menu({ setToggler, togglerState }) {
 
 
   const [menu, setMenu] = useState([]);
 
 
-
-  // const fetchDataAsync = async () => {
-  //   try {
-  //     const result = await getMenu();
-  //     console.log('res', result);
-  //     // setData(result);
-  //   } catch (error) {
-  //     // Gestisci l'errore qui
-  //   }
-  // }
 
 
 
@@ -40,8 +32,9 @@ export default function Menu() {
     color: #fff;
     a{
       font-size: 15px;
-    font-weight: bold;
+      font-weight: bold;
       color: #fff;
+      width: 100%;
     }
     a:hover {
       background-color: #fff;
@@ -50,6 +43,18 @@ export default function Menu() {
       color: #526ae5;
     }
 `;
+
+
+  const ToggleBar = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 70px;
+  svg{
+    width: 70px;
+    height: 70px;
+  }  
+`
 
 
 
@@ -61,31 +66,46 @@ export default function Menu() {
   const others = [
     {
       'codice': "",
+      'descrizione': "Home",
+      route: "",
+      sequenza: 5,
+    },
+    {
+      'codice': "",
       'descrizione': "Utenti",
       route: "users",
       sequenza: 4,
-    }
+    },
+    {
+      'codice': "",
+      'descrizione': "Posts",
+      route: "posts",
+      sequenza: 5,
+    },
+    
   ]
 
 
 
+  const handleOpening = () => {
+    setToggler();
+  }
 
-  // const addOthersRoutes = (data) => {
-  //   return array1.concat(data, others);
-  // };
+
+
 
 
   useEffect(() => {
+    setMenu(others);
+    // axios.get('cope/COPE/odl/menu')
+    //   .then((response) => {
+    //     const menu = response.data.concat(others);
+    //     setMenu(menu);
 
-    axios.get('cope/COPE/odl/menu')
-      .then((response) => {
-        const menu = response.data.concat(others);
-        setMenu(menu);
-
-      })
-      .catch((error) => {
-        alert('Errore durante la chiamata HTTP:', error);
-      });
+    //   })
+    //   .catch((error) => {
+    //     alert('Errore durante la chiamata HTTP:', error);
+    //   });
 
 
 
@@ -93,24 +113,21 @@ export default function Menu() {
 
 
 
-  if (menu && menu.length && menu.length > 1) {
+  if (menu && menu.length && menu.length > 0) {
     return (
       <div className='menu-container'>
+        <ToggleBar onClick={handleOpening}>
+          {togglerState && <BsChevronDoubleLeft />}
+          {!togglerState && <BsChevronDoubleRight />}
+
+        </ToggleBar>
         {menu.map((menuItem, index) =>
           <MenuItem key={index}>
-            {menuItem.children && menuItem.children.length === 0 && <Link to={`/${menuItem.route}`}> {menuItem.descrizione} {menuItem.root}</Link>}
-
-            {menuItem.children && menuItem.children.length > 1 &&
-              <ChildWrapper >
-                {menuItem.children.map(((childMenuItem, childIndex) => <Link key={childIndex} to={`/${childMenuItem.route}`}> {childMenuItem.descrizione} {childMenuItem.root}</Link>))}
-              </ChildWrapper>}
-
-          </MenuItem>)}
+            { togglerState && <Link to={`/${menuItem.route}`}> {menuItem.descrizione} {menuItem.root}</Link>}
+          </MenuItem>
+        )
+        }
       </div>
-    )
-  } else {
-    return (
-      <div>menu NO</div>
     )
   }
 

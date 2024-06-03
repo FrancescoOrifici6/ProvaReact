@@ -7,7 +7,7 @@ import { useLogout } from '../../hooks/useUserManager';
 import { useNavigate } from 'react-router-dom';
 
 
-export default function Topbar() {
+export default function Topbar({ updateLogin }) {
 
 
     const nav = useNavigate();
@@ -20,6 +20,11 @@ export default function Topbar() {
     flex-direction: column;
     align-items: center;
     width: 100px;
+    height: 70px;
+    svg{
+        height: 70px;
+        width: 30px;
+    }
   `
 
 
@@ -27,6 +32,12 @@ export default function Topbar() {
         nav('/userDetails');
     }
 
+
+
+    const handleLogout = () => {
+        logout();
+        updateLogin(false);
+    }
 
 
 
@@ -47,7 +58,7 @@ export default function Topbar() {
                 </div>
             }
 
-            <Logout onClick={logout}>
+            <Logout onClick={handleLogout}>
                 <AiOutlineLogout />
             </Logout>
 

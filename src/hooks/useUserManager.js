@@ -9,9 +9,9 @@ export const useLogout = () => {
 
     const handleLogout = () => {
         // Esegui il logout
-        logout();
+        localStorage.removeItem('current_token');
         // Redirigi alla pagina di login
-        navigate('/login');
+        navigate('/');
     };
 
     return handleLogout;
