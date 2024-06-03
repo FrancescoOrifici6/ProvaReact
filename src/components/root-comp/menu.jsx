@@ -95,11 +95,9 @@ export default function Menu() {
 
   if (menu && menu.length && menu.length > 1) {
     return (
-
       <div className='menu-container'>
         {menu.map((menuItem, index) =>
           <MenuItem key={index}>
-
             {menuItem.children && menuItem.children.length === 0 && <Link to={`/${menuItem.route}`}> {menuItem.descrizione} {menuItem.root}</Link>}
 
             {menuItem.children && menuItem.children.length > 1 &&

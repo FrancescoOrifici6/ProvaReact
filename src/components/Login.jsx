@@ -20,12 +20,6 @@ export default function Login( {updateLogin}  ) {
     });
 
 
-
-
-
-
-
-
   const handleSubmit = async (e) => {
     const data = {
       // Dati da inviare nel corpo della richiesta

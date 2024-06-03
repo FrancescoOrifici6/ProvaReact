@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { setLoggedUser } from './store/slices/userSlice';
 import Topbar from './components/root-comp/topbar';
+import UserDetails from './components/pages/UserDetails';
 
 
 function App() {
@@ -73,10 +74,12 @@ function App() {
             </div>
             <div className='container'>
               <Routes>
+                <Route path='/login' element={<Login/>} />
                 <Route path='/' element={<h1>home</h1>} />
                 <Route path='/1' element={<h1>1</h1>} />
                 <Route path='/2' element={<h1>2</h1>} />
                 <Route path='/users' element={<Users />} />
+                <Route path="/userDetails" element={<UserDetails />} />
               </Routes>
             </div>
           </div>
