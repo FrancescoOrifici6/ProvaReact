@@ -99,7 +99,6 @@ function App() {
             <div className='container'>
               <Routes>
                 <Route path='/' element={<h1>home</h1>} />
-                <Route path='/1' element={<h1>1</h1>} />
                 <Route path='/posts' element={<Posts/>} />
                 <Route path='/users' element={<Users />} />
                 <Route path="/userDetails" element={<UserDetails />} />
