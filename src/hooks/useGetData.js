@@ -13,15 +13,17 @@ export const useGetData = (url) => {
                 .then(json => setData(json)).catch(error => setError(error))
         }
 
-        try {
-            // success api call handling
-            fetchTodos()
-            setLoading(false)
-        } catch (error) {
-            // error handling
+        if (url) {
+            try {
 
+                // success api call handling
+                fetchTodos()
+                setLoading(false)
+            } catch (error) {
+                // error handling
+
+            }
         }
-
 
 
     }, [url])

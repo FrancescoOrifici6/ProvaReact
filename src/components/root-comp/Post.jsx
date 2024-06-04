@@ -1,16 +1,28 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 function Post({ postData }) {
 
 
+
+    const nav = useNavigate();
+
+
     const Post = styled.div`
         display: flex;
         flex-direction: column;
-        padding: 10px;
+        padding: 10px 20px;
         border-radius: 4px;
         border: 1px solid #000;
-        width: 350px;
+        .name{
+            font-weight: bold;
+            font-size: 20px;
+            &:hover{
+                text-decoration: underline;
+                color: #526ae5;
+            }
+        }
         .title{
             font-size: 15px;
             text-align: start;
@@ -25,14 +37,25 @@ function Post({ postData }) {
     `
 
 
-    console.log('postdata', postData);
+    const handlePostClick = (data) => {
+        console.log('data', data);
+        if (data.target && data.target.id) {
+            nav('/'+data.target.id);
+        }
+    }
+
+    // console.log('postdata', postData);
+
     return (
         <Post >
+            <div className='name' id={`user/${postData.userId}`} onClick={(e) => handlePostClick(e)}>
+                {postData.userInfo.name}
+            </div>
             <div className='title'>
-               {postData.title}
+                {postData.title}
             </div>
             <div className='body'>
-               {postData.body}
+                {postData.body}
             </div>
 
         </Post>
