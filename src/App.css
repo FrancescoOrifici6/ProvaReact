@@ -38,8 +38,7 @@
   color: #888;
 }
 
-
-.topbar{
+.topbar {
   height: 70px;
   display: flex;
   width: 100%;
@@ -106,15 +105,18 @@
   }
 }
 
-
 .custom-container {
   display: flex;
   flex-direction: row;
   height: calc(100% - 70px);
 }
 
-
-
+.menu-container-2 {
+  transition: 0.3s all ease;
+  height: 100%;
+  background-color: #526ae5;
+  color: #fff;
+}
 
 .menu-container {
   display: flex;
@@ -131,7 +133,7 @@
     justify-content: center;
     font-size: 15px;
     font-weight: 700;
-    
+
     &:hover {
       background-color: #fff;
       color: #526ae5;

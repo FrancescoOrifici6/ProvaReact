@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { getMenu } from '../../services/menu.service';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
 
 
-export default function Menu({ setToggler, togglerState }) {
+export default function Menu() {
 
 
   const [menu, setMenu] = useState([]);
+
+
+  const [opened, setOpened] = useState(false);
+
 
 
 
@@ -56,6 +58,14 @@ export default function Menu({ setToggler, togglerState }) {
   }  
 `
 
+  const MenuContainer = styled.div`
+    width: ${props => (props.opened ? '300px' : '70px')};
+    transition: 0.3s all ease;
+    height: 100%;
+    background-color: #526ae5;
+    color: #fff;
+`
+
 
 
 
@@ -82,13 +92,13 @@ export default function Menu({ setToggler, togglerState }) {
       route: "posts",
       sequenza: 5,
     },
-    
+
   ]
 
 
 
   const handleOpening = () => {
-    setToggler();
+    setOpened(prev => !prev)
   }
 
 
@@ -115,15 +125,15 @@ export default function Menu({ setToggler, togglerState }) {
 
   if (menu && menu.length && menu.length > 0) {
     return (
-      <div className='menu-container'>
+      <div className='menu-container-2' style={{width : opened ? '260px' : '70px'}}>
         <ToggleBar onClick={handleOpening}>
-          {togglerState && <BsChevronDoubleLeft />}
-          {!togglerState && <BsChevronDoubleRight />}
+          {opened && <BsChevronDoubleLeft />}
+          {!opened && <BsChevronDoubleRight />}
 
         </ToggleBar>
         {menu.map((menuItem, index) =>
           <MenuItem key={index}>
-            { togglerState && <Link to={`/${menuItem.route}`}> {menuItem.descrizione} {menuItem.root}</Link>}
+            {opened && <Link to={`/${menuItem.route}`}> {menuItem.descrizione} {menuItem.root}</Link>}
           </MenuItem>
         )
         }

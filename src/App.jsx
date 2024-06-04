@@ -10,7 +10,6 @@ import axios from 'axios';
 import { setLoggedUser } from './store/slices/userSlice';
 import Topbar from './components/root-comp/topbar';
 import UserDetails from './components/pages/UserDetails';
-import styled from 'styled-components';
 import Posts from './components/pages/Posts';
 
 
@@ -23,7 +22,6 @@ function App() {
 
   const [logged, setLogged] = useState(false);
 
-  const [opened, setOpened] = useState(false);
 
 
   useEffect(() => {
@@ -55,32 +53,12 @@ function App() {
 
 
 
-  const MenuContainer = styled.div`
-  width: ${props => (props.opened ? '300px' : '70px')};
-  transition: 0.3s all ease;
-  height: 100%;
-  background-color: #526ae5;
-  color: #fff;
-  `
-
-
-
-
   const updateLogin = (value) => {
     setLogged(value);
     if (value) {
       storeUser();
     }
   }
-
-
-
-  const handleOpening = () => {
-    setOpened(prev => !prev);
-  }
-
-
-
 
 
   if (logged === false) {
@@ -93,13 +71,11 @@ function App() {
         <div className='app-container'>
           <Topbar updateLogin={updateLogin} />
           <div className='custom-container'>
-            <MenuContainer opened={opened}>
-              <Menu setToggler={handleOpening}   togglerState={opened}/>
-            </MenuContainer>
-            <div className='container'>
+            <Menu    />
+            <div className='container' >
               <Routes>
                 <Route path='/' element={<h1>home</h1>} />
-                <Route path='/posts' element={<Posts/>} />
+                <Route path='/posts' element={<Posts />} />
                 <Route path='/users' element={<Users />} />
                 <Route path="/userDetails" element={<UserDetails />} />
               </Routes>
