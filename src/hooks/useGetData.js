@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react"
 
+
+
+// implementa lo useEffect questo conferisce all hook la capacità di essere lanciato 
+// sulla partenza del componente o sulla modifica dell deps
 export const useGetData = (url) => {
 
     const [data, setData] = useState([])

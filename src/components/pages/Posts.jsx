@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useGetData } from '../../hooks/useGetData'
 import styled from 'styled-components'
 import Post from '../root-comp/Post'
+import { Spinner } from 'react-bootstrap'
 
 
 const ALL_POST_URL = 'https://jsonplaceholder.typicode.com/posts/'
@@ -54,18 +55,19 @@ function Posts() {
 
 
 
-    if (data) {
+    if (data && data.length) {
         return (
             <PostContainer>
                 {data && data.length && data.map(item => <Post key={item.id} postData={item} />)}
             </PostContainer>
         )
-    }else{
-        return (
-            <div>LOADING...</div>
+    } else {
+        return (      
+        <Spinner animation="grow" />
         )
 
     }
 }
 
 export default Posts
+
