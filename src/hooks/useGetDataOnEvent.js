@@ -19,9 +19,13 @@ export function useFetchOnEvent() {
         try {
             const response = await axios.get(url);
             setData(response.data);
-        } catch (error) {
+        } 
+        
+        catch (error) {
             setError(error);
-        } finally {
+        } 
+
+        finally {
             setLoading(false);
         }
     };

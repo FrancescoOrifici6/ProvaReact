@@ -72,7 +72,7 @@ function App() {
           <Topbar updateLogin={updateLogin} />
           <div className='custom-container'>
             <Menu    />
-            <div className='container' >
+            <div className='common-container' >
               <Routes>
                 <Route path='/' element={<h1>home</h1>} />
                 <Route path='/posts' element={<Posts />} />

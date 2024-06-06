@@ -1,3 +1,7 @@
+/* @import 'bootstrap/dist/css/bootstrap.min.css'; */
+@import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+
+
 #root {
   width: 100vw;
   height: 100vh;
@@ -100,7 +104,7 @@
   flex-direction: column;
   height: 100%;
 
-  .container {
+  .common-container {
     width: calc(100% - 300px);
   }
 }
