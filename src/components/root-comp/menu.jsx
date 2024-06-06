@@ -92,6 +92,12 @@ export default function Menu() {
       route: "posts",
       sequenza: 5,
     },
+    {
+      'codice': "",
+      'descrizione': "Albums",
+      route: "albums",
+      sequenza: 5,
+    },
     
 
   ]

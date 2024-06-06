@@ -11,6 +11,7 @@ import { setLoggedUser } from './store/slices/userSlice';
 import Topbar from './components/root-comp/topbar';
 import UserDetails from './components/pages/UserDetails';
 import Posts from './components/pages/Posts';
+import Albums from './components/pages/Albums';
 
 
 function App() {
@@ -78,6 +79,7 @@ function App() {
                 <Route path='/posts' element={<Posts />} />
                 <Route path='/users' element={<Users />} />
                 <Route path="/user/:id" element={<UserDetails />} />
+                <Route path="/albums" element={<Albums />} />
               </Routes>
             </div>
           </div>
