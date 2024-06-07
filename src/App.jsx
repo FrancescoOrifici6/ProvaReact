@@ -12,79 +12,91 @@ import Topbar from './components/root-comp/topbar';
 import UserDetails from './components/pages/UserDetails';
 import Posts from './components/pages/Posts';
 import Albums from './components/pages/Albums';
+import useKeycloakAuth from './hooks/useKeycloakAuth';
+import { useKeycloak } from '@react-keycloak/web';
 
 
 function App() {
 
 
-  const dispatchLoggedUser = useDispatch()
+
+
+  // keycloak hook
+  const keycloak = useKeycloak()
 
 
 
-  const [logged, setLogged] = useState(false);
+  console.log('keycloak', keycloak);
+
+  // const isLogged = useKeycloakAuth();
+
+  // const dispatchLoggedUser = useDispatch()
+
+  // const [logged, setLogged] = useState(false);
 
 
 
-  useEffect(() => {
-    console.log('initial effect')
-    const currentToken = (localStorage.getItem('current_token'));
-    if (currentToken) {
-      setAuthorizationToken(currentToken);
-      setLogged(true);
-      storeUser();
-    }
-  }, []);
+  // useEffect(() => {
+  //   console.log('initial effect')
+  //   const currentToken = (localStorage.getItem('current_token'));
+  //   if (currentToken) {
+  //     setAuthorizationToken(currentToken);
+  //     setLogged(true);
+  //     storeUser();
+  //   }
+  // }, []);
 
 
 
 
-  const storeUser = () => {
+  // const storeUser = () => {
 
-    axios.get('cope/COPE/odl/getUser')
-      .then((response) => {
-        dispatchLoggedUser(setLoggedUser(response.data));
-      })
-      .catch((error) => {
-        alert('Errore durante la chiamata HTTP:', error);
-      });
-
-
-
-  }
+  //   axios.get('cope/COPE/odl/getUser')
+  //     .then((response) => {
+  //       dispatchLoggedUser(setLoggedUser(response.data));
+  //     })
+  //     .catch((error) => {
+  //       alert('Errore durante la chiamata HTTP:', error);
+  //     });
 
 
 
-  const updateLogin = (value) => {
-    setLogged(value);
-    if (value) {
-      storeUser();
-    }
-  }
+  // }
 
 
-  if (logged === false) {
+
+  // const updateLogin = (value) => {
+  //   setLogged(value);
+  //   if (value) {
+  //     storeUser();
+  //   }
+  // }
+
+
+  if (keycloak.keycloak.authenticated === false) {
     return (
-      <Login updateLogin={updateLogin} />
+      <div>NOT LOGGED</div>
     )
   } else {
     return (
-      <BrowserRouter>
-        <div className='app-container'>
-          <Topbar updateLogin={updateLogin} />
-          <div className='custom-container'>
-            <Menu    />
-            <div className='common-container' >
-              <Routes>
-                <Route path='/' element={<h1>home</h1>} />
-                <Route path='/posts' element={<Posts />} />
-                <Route path='/users' element={<Users />} />
-                <Route path="/user/:id" element={<UserDetails />} />
-                <Route path="/albums" element={<Albums />} />
-              </Routes>
-            </div>
-          </div>
-        </div>
-      </BrowserRouter>
+      <div> Logged</div>
+      // <BrowserRouter>
+      //   <div className='app-container'>
+      //     <Topbar updateLogin={updateLogin} />
+      //     <div className='custom-container'>
+      //       <Menu />
+      //       <div className='common-container' >
+      //         <Routes>
+      //           <Route path='/' element={<h1>home</h1>} />
+      //           <Route path='/posts' element={<Posts />} />
+      //           <Route path='/users' element={<Users />} />
+      //           <Route path="/user/:id" element={<UserDetails />} />
+      //           <Route path="/albums" element={<Albums />} />
+      //         </Routes>
+      //       </div>
+      //     </div>
+      //   </div>
+      // </BrowserRouter>
     )
 
   }

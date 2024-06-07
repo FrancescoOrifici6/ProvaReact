@@ -4,13 +4,17 @@ import App from './App'
 import './index.css'
 import store from './store/store'
 import { Provider } from 'react-redux'
+import { ReactKeycloakProvider } from '@react-keycloak/web'
+import { keycloak, keycloakProviderInitConfig } from './keycloak-config/keycloak.config'
 
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>
+  <ReactKeycloakProvider authClient={keycloak}  initOptions={keycloakProviderInitConfig}>
+    <React.StrictMode>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </React.StrictMode>
+  </ReactKeycloakProvider>
 )
