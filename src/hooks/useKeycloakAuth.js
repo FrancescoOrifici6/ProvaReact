@@ -17,6 +17,13 @@ const useKeycloakAuth = () => {
     const [isLogged, setLogged] = useState(false);
 
 
+
+    useEffect(() => {
+        console.log('loggedChange');
+    }, [isLogged])
+
+
+
     useEffect(() => {
 
         const client = new Keycloak({
@@ -25,10 +32,13 @@ const useKeycloakAuth = () => {
             url: "http://128.0.0.7:8010",
         });
 
-        client.init({ 
+        client.init({
             onLoad: "check-sso",
-            checkLoginIframe: false, 
-         }).then((res) => { setLogged(true) });
+            checkLoginIframe: false,
+        }).then((res) => {
+            console.log('authres', res);
+            setLogged(true)
+        });
 
     }, [])
 

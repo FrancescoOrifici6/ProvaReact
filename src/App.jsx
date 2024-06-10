@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import Login from './components/Login'
 import Menu from './components/root-comp/menu';
-import { setAuthorizationToken } from './interceptor/axiosInterceptor';
+import { setAuthorizationToken, tokenHandling } from './interceptor/axiosInterceptor';
 import { BrowserRouter, createBrowserRouter, Route, Router, RouterProvider, Routes, useLocation } from 'react-router-dom';
 import Users from './components/pages/Users';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,6 +14,7 @@ import Posts from './components/pages/Posts';
 import Albums from './components/pages/Albums';
 import useKeycloakAuth from './hooks/useKeycloakAuth';
 import { useKeycloak } from '@react-keycloak/web';
+import { Archive } from './components/cet_components/data/Archive';
 
 
 function App() {
@@ -27,6 +28,14 @@ function App() {
 
 
   console.log('keycloak', keycloak);
+
+  if(keycloak.keycloak.token){
+    tokenHandling(keycloak.keycloak.token)
+  }
+  
+  // if(keycloak.keycloak.authenticated){
+  //   setAuthorizationToken('Bearer' + keycloak.keycloak.token)
+  // }
 
   // const isLogged = useKeycloakAuth();
 
@@ -79,24 +88,23 @@ function App() {
     )
   } else {
     return (
-      <div> Logged</div>
-      // <BrowserRouter>
-      //   <div className='app-container'>
-      //     <Topbar updateLogin={updateLogin} />
-      //     <div className='custom-container'>
-      //       <Menu />
-      //       <div className='common-container' >
-      //         <Routes>
-      //           <Route path='/' element={<h1>home</h1>} />
-      //           <Route path='/posts' element={<Posts />} />
-      //           <Route path='/users' element={<Users />} />
-      //           <Route path="/user/:id" element={<UserDetails />} />
-      //           <Route path="/albums" element={<Albums />} />
-      //         </Routes>
-      //       </div>
-      //     </div>
-      //   </div>
-      // </BrowserRouter>
+      <BrowserRouter>
+        <div className='app-container'>
+          <Topbar />
+          <div className='custom-container'>
+            <Menu />
+            <div className='common-container' >
+              <Routes>
+                <Route path='/' element={<h1>home</h1>} />
+                <Route path='/difetti' element={<Archive entity="Difetto"/>} />
+                <Route path='/users' element={<Users />} />
+                <Route path="/user/:id" element={<UserDetails />} />
+                <Route path="/albums" element={<Albums />} />
+              </Routes>
+            </div>
+          </div>
+        </div>
+      </BrowserRouter>
     )
 
   }

@@ -6,11 +6,17 @@ import store from './store/store'
 import { Provider } from 'react-redux'
 import { ReactKeycloakProvider } from '@react-keycloak/web'
 import { keycloak, keycloakProviderInitConfig } from './keycloak-config/keycloak.config'
+import { setAuthorizationToken, tokenHandling } from './interceptor/axiosInterceptor'
+
+
+
+
+
 
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <ReactKeycloakProvider authClient={keycloak}  initOptions={keycloakProviderInitConfig}>
+  <ReactKeycloakProvider authClient={keycloak}  initOptions={keycloakProviderInitConfig}   onTokens={tokenHandling} >
     <React.StrictMode>
       <Provider store={store}>
         <App />
