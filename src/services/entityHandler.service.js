@@ -12,12 +12,18 @@ const entitySchema = {
 
 
 export const columnsDispatcher = (entity) => {
-   return colsSchema[entity];
+    return colsSchema[entity];
+}
+
+
+
+export const dateFormatter = (value) => {
+    console.log('custom date', value);
 }
 
 
 export const colsSchema = {
-    'Difetto' : [
+    'Difetto': [
         {
             header: 'ID',
             field: 'id',
@@ -26,7 +32,12 @@ export const colsSchema = {
         {
             header: 'Nome',
             field: 'nome',
-            width: '170px'
+            width: '270px'
+        },
+        {
+            header: 'Data',
+            field: 'creazione',
+            width: '170px',
         }
     ]
 }

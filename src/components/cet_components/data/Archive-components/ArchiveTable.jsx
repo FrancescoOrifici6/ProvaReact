@@ -17,46 +17,57 @@ export function ArchiveTable({ serviceName }) {
     const Column = styled.th`
         border: 1px solid #000;
         padding: 4px;
-        width: ;
+        width: ${(props) => props.width}; // Access to the prop
     `
 
 
     const Thead = styled.tr`
-      border: 1px solid #000;
-      padding: 4px;
+      display: flex;
+      align-items: center;
+      width: ${(props) => props.width}; // Access to the prop
     `
 
 
     const Trow = styled.tr`
+       height: 40px;
        display: flex;
-       flex-direction: row;
-       align-items: center;
     `
 
-    const Cell = styled.tr`
+    const Table = styled.table`
+        height: calc(100vh - 140px);
+        display: flex;
+        flex-direction: column;
+    `
+
+    const Tbody = styled.tbody`
+    overflow:auto;
+    `
+
+    const Cell = styled.td`
      border: 1px solid #000;
       padding: 4px;
+      width: ${(props) => props.width}; // Access to the prop
    `
 
     if (data && data.length && cols && cols.length) {
         return (
             <TableContainer>
-                <table>
+                <Table>
                     <thead>
                         <Thead>
                             {cols.map(col => <Column width={col.width} key={col.field}>{col.header}</Column>)}
                         </Thead>
                     </thead>
-                    <tbody>
+                    <Tbody>
                         {data.map(row =>
                             <Trow>
-                                {cols.map(item => <Cell > {row[item.field]}</Cell>)}
+                                {cols.map(item => <Cell width={item.width}> {row[item.field]}</Cell>)}
                             </Trow>
                         )}
 
-                    </tbody>
+                    </Tbody>
 
-                </table>
+                </Table>
 
             </TableContainer>
         )
