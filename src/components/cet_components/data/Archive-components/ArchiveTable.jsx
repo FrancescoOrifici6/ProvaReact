@@ -64,11 +64,8 @@ export function ArchiveTable({ serviceName }) {
                                 {cols.map(item => <Cell width={item.width}> {row[item.field]}</Cell>)}
                             </Trow>
                         )}
-
                     </Tbody>
-
                 </Table>
-
             </TableContainer>
         )
     } else {
