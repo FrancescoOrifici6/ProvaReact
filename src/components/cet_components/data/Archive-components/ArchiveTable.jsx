@@ -53,11 +53,13 @@ export function ArchiveTable({ serviceName }) {
         return (
             <TableContainer>
                 <Table>
+                    
                     <thead>
                         <Thead>
                             {cols.map(col => <Column width={col.width} key={col.field}>{col.header}</Column>)}
                         </Thead>
                     </thead>
+
                     <Tbody>
                         {data.map(row =>
                             <Trow>
@@ -65,6 +67,7 @@ export function ArchiveTable({ serviceName }) {
                             </Trow>
                         )}
                     </Tbody>
+
                 </Table>
             </TableContainer>
         )
