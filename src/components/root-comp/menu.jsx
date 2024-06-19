@@ -78,28 +78,17 @@ export default function Menu() {
       'codice': "",
       'descrizione': "Home",
       route: "",
-      sequenza: 5,
     },
     {
-      'codice': "",
-      'descrizione': "Utenti",
-      route: "users",
-      sequenza: 4,
+      codice: "",
+      descrizione: "Archivio Difetti",
+      route: "difetti",
     },
     {
-      'codice': "",
-      'descrizione': "Posts",
-      route: "posts",
-      sequenza: 5,
+      codice: "",
+      descrizione: "Controlli",
+      route: "controlli",
     },
-    {
-      'codice': "",
-      'descrizione': "Albums",
-      route: "albums",
-      sequenza: 5,
-    },
-    
-
   ]
 
 
@@ -132,7 +121,7 @@ export default function Menu() {
 
   if (menu && menu.length && menu.length > 0) {
     return (
-      <div className='menu-container-2' style={{width : opened ? '260px' : '70px'}}>
+      <div className='menu-container-2' style={{ width: opened ? '260px' : '70px' }}>
         <ToggleBar onClick={handleOpening}>
           {opened && <BsChevronDoubleLeft />}
           {!opened && <BsChevronDoubleRight />}

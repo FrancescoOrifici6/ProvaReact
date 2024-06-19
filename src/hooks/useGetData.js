@@ -10,16 +10,16 @@ export const useGetData = (url) => {
 
     useEffect(() => {
 
+        
         // dichiarazione metodo
         const fetchTodos = async () => {
             fetch(url)
                 .then(response => response.json())
-                .then(json => setData(json)).catch(error => setError(error))
+                .then(json => setData(json)).catch(error => console.log('error'))
         }
 
         if (url) {
             try {
-
                 // success api call handling
                 fetchTodos()
                 setLoading(false)

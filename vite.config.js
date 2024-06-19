@@ -11,11 +11,17 @@ export default defineConfig({
     react()],
   server: {
     proxy: {
-      '/cope': {
-        target: 'http://cont.multidatagroup.it/cope/api/cope/v1',
+      // '/cope': {
+      //   target: 'http://cont.multidatagroup.it/cope/api/cope/v1',
+      //   changeOrigin: true,
+      //   rewrite: (path) => path.replace(/^\/cope/, ''),
+      // },
+      '/archiviodifetti/api': {
+        target: 'http://localhost:8080/api',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/cope/, ''),
+        rewrite: (path) => path.replace('archiviodifetti/api', ""),
       },
+
     },
   },
 })

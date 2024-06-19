@@ -2,23 +2,14 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import { useEffect } from 'react'
 import User from '../root-comp/User';
-import { Input } from '@mui/material';
+
+
 
 export default function Users() {
-
-
 
   const [users, setUsers] = useState([]);
 
   const [filterString, setFilterString] = useState('');
-
-
-
-
-  const updateFilter = () => {
-
-  }
-
 
   const filterUsers = (user) => {
     if (filterString) {
