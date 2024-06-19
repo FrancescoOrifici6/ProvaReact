@@ -87,6 +87,27 @@
   height: 100%;
 }
 
+
+
+::-webkit-scrollbar {
+  width: 8px;
+  border-radius: 30px;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 30px;
+  background-color: #afafb0;
+}
+
+::-webkit-scrollbar-button,
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-track-piece,
+::-webkit-scrollbar-corner,
+::-webkit-resizer {
+  display: none;
+}
+
 .login-card {
   width: 300px;
   height: 300px;

@@ -4,7 +4,6 @@ import { columnsDispatcher, entityDispatcherUrl } from "../services/entityHandle
 
 export const useGetArchiveData = (entity) => {
     const [data, setData] = useState([]);
-    const [cols, setCols] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -20,8 +19,15 @@ export const useGetArchiveData = (entity) => {
                             Authorization: `Bearer ${tokens}`
                         }
                     })
-                setData(response.data);
-                setCols(columnsDispatcher(entity));
+                const columns = columnsDispatcher(entity);
+                await checkColsData(columns);
+
+                const archiveData = {
+                    cols: columns,
+                    rows: response.data
+                }
+
+                setData(archiveData);
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -34,5 +40,42 @@ export const useGetArchiveData = (entity) => {
         }
     }, [entity]);
 
-    return { data, cols, loading };
+
+
+
+    const checkColsData = async (colsArray) => {
+
+        for (let index = 0; index < colsArray.length; index++) {
+            const element = colsArray[index];
+            if (element.entity) {
+                const colData = await fetchColsData(element);
+                console.log('colsdata', colData);
+            }
+
+        }
+
+    }
+
+
+    const fetchColsData = async (col) => {
+
+        const tokens = JSON.parse(sessionStorage.getItem('token_current'));
+        const apiUrl = entityDispatcherUrl(col.entity);
+
+        try {
+            const res = await await axios.get(apiUrl,
+                {
+                    headers: {
+                        Authorization: `Bearer ${tokens}`
+                    }
+                });
+            col.columnData = res.data;
+
+        } catch (err) {
+            console.log('http error');
+        }
+
+    }
+
+    return { data, loading };
 };
