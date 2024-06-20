@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { Breadcrumb } from './Archive-components/Breadcrumb';
 import { ArchiveTable } from './Archive-components/ArchiveTable';
 import ArchiveDetails from './Archive-components/ArchiveDetails';
+import _ from 'lodash';
 
 
 
@@ -43,7 +44,7 @@ export function Archive({ entity }) {
 
 
   const handleRowSelection = useCallback((row) => {
-    setSelectedRowItem(row);
+    setSelectedRowItem(_.cloneDeep(row));
   }, []);
 
 
@@ -61,7 +62,7 @@ export function Archive({ entity }) {
           data={data}
         />
 
-        <ArchiveDetails archiveSelection={selectedRowItem}  service={entity}></ArchiveDetails>  
+        <ArchiveDetails archiveSelection={selectedRowItem} service={entity}></ArchiveDetails>
 
       </PageContainer>
     </ArchiveContainer>

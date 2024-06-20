@@ -1,21 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-
-
+import _ from 'lodash';
 
 export default function DifettoDetails({ archiveSelection }) {
 
-
-    const [currentValue, setCurrentValue] = useState(archiveSelection ? archiveSelection : undefined);
-
+    const [currentValue, setCurrentValue] = useState(archiveSelection);
 
 
-
-
-
-
+    useEffect(() => {
+        setCurrentValue(archiveSelection);
+    }, [archiveSelection]);
 
     // styled components definitions
 
@@ -106,8 +102,12 @@ export default function DifettoDetails({ archiveSelection }) {
 
 
 
-    const textChange = (key, e) => {
-        setCurrentValue(prev => prev[key] = e.target.value);
+    const textChange = (ev) => {
+        const { name, value } = ev.target;
+        setCurrentValue({
+            ...currentValue,
+            [name]: value
+        });
     }
 
 
@@ -128,7 +128,7 @@ export default function DifettoDetails({ archiveSelection }) {
                         className="mb-1"
                         fill
                     >
-                        <Tab eventKey="Info" title="Info">
+                        <Tab eventKey="Info" title="Info" active>
                             <DetailsHeader>
                                 <div className='flex-row gap-10'>
                                     <div className='flex-row'>
@@ -145,8 +145,8 @@ export default function DifettoDetails({ archiveSelection }) {
                                         <FormLabel>
                                             Nome
                                         </FormLabel>
-                                        <Input name="nome-difetto" type='text' value={currentValue.nome} onChange={(e) => textChange('nome', e)} id="nome-difetto-input"
-                                            autocomplete="off" />
+                                        <Input name="nome" type='text' value={currentValue.nome} onChange={textChange} id="nome-difetto-input"
+                                        />
                                     </div>
 
                                 </div>
