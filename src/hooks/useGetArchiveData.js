@@ -77,5 +77,22 @@ export const useGetArchiveData = (entity) => {
 
     }
 
-    return { data, loading };
+
+
+    const dataUpdate = (rowToAdd) => {
+
+        console.log(rowToAdd, data);
+        const clone = data;
+
+        for(let item of clone.rows){
+            if(item.id === rowToAdd.id){
+                item = Object.assign(item, item, rowToAdd);
+            }
+        }
+
+        setData(clone);
+
+    }
+
+    return { data, loading, dataUpdate };
 };

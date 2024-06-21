@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import _ from 'lodash';
+import { dataPatch } from '../../../../../services/patch.service';
 
-export default function DifettoDetails({ archiveSelection }) {
+export default function DifettoDetails({ archiveSelection, updateItem }) {
 
     const [currentValue, setCurrentValue] = useState(archiveSelection);
 
@@ -12,6 +13,17 @@ export default function DifettoDetails({ archiveSelection }) {
     useEffect(() => {
         setCurrentValue(archiveSelection);
     }, [archiveSelection]);
+
+
+    const handleBlur = async () => {
+        if (JSON.stringify(currentValue) !== JSON.stringify(archiveSelection)) {
+            const updated = _.cloneDeep(currentValue);
+            const newValue = await dataPatch('Difetto', currentValue.id, archiveSelection, updated);
+            updateItem(newValue);
+        }
+    };
+
+
 
     // styled components definitions
 
@@ -25,11 +37,11 @@ export default function DifettoDetails({ archiveSelection }) {
 
 
     const DetailsContainer = styled.div`
-    display: flex;
-    width: 500px;
-    align-items: center;
-    height: 100%;
-    padding: 20px;
+         display: flex;
+         width: 500px;
+         align-items: center;
+         height: 100%;
+         padding: 20px;
     `
 
 
@@ -98,19 +110,15 @@ export default function DifettoDetails({ archiveSelection }) {
   }
 
 `
+    const textChange = async (ev) => {
 
-
-
-
-    const textChange = (ev) => {
         const { name, value } = ev.target;
-        setCurrentValue({
-            ...currentValue,
+        setCurrentValue(prevState => ({
+            ...prevState,
             [name]: value
-        });
+        }));
+
     }
-
-
 
 
     console.log('props', archiveSelection);
@@ -130,27 +138,28 @@ export default function DifettoDetails({ archiveSelection }) {
                     >
                         <Tab eventKey="Info" title="Info" active>
                             <DetailsHeader>
-                                <div className='flex-row gap-10'>
-                                    <div className='flex-row'>
-                                        <FormLabel>
-                                            Cod
-                                        </FormLabel>
-                                        <div>
-                                            {currentValue.id}
+                                <form>
+                                    <div className='flex-row gap-10'>
+                                        <div className='flex-row'>
+                                            <FormLabel>
+                                                Cod
+                                            </FormLabel>
+                                            <div>
+                                                {currentValue.id}
+                                            </div>
                                         </div>
+
+
+                                        <div className='flex-row'>
+                                            <FormLabel>
+                                                Nome
+                                            </FormLabel>
+                                            <Input name="nome" type='text' onBlur={handleBlur} autoFocus value={currentValue.nome} onChange={textChange} id="nome-difetto-input"
+                                            />
+                                        </div>
+
                                     </div>
-
-
-                                    <div className='flex-row'>
-                                        <FormLabel>
-                                            Nome
-                                        </FormLabel>
-                                        <Input name="nome" type='text' value={currentValue.nome} onChange={textChange} id="nome-difetto-input"
-                                        />
-                                    </div>
-
-                                </div>
-
+                                </form>
 
                             </DetailsHeader>
 

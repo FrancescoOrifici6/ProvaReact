@@ -38,14 +38,24 @@ export function Archive({ entity }) {
 
 
 
-  const { data } = useGetArchiveData(entity);
+  const { data, dataUpdate } = useGetArchiveData(entity);
 
 
 
 
   const handleRowSelection = useCallback((row) => {
-    setSelectedRowItem(_.cloneDeep(row));
+    setSelectedRowItem(row);
   }, []);
+
+
+
+  const updateItem = (row) => {
+    dataUpdate(row);
+    setSelectedRowItem(row);
+  };
+
+
+
 
 
 
@@ -62,7 +72,7 @@ export function Archive({ entity }) {
           data={data}
         />
 
-        <ArchiveDetails archiveSelection={selectedRowItem} service={entity}></ArchiveDetails>
+        <ArchiveDetails archiveSelection={selectedRowItem} updateItem={updateItem} service={entity}></ArchiveDetails>
 
       </PageContainer>
     </ArchiveContainer>
