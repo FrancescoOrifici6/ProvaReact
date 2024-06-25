@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import CityCard from './cityCard';
-import _, { add } from 'lodash';
+import _ from 'lodash';
 import AddCard from './addCard';
 
 export default function CardWrapper() {

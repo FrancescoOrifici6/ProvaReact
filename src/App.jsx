@@ -15,6 +15,7 @@ import Albums from './components/pages/Albums';
 import useKeycloakAuth from './hooks/useKeycloakAuth';
 import { useKeycloak } from '@react-keycloak/web';
 import { Archive } from './components/cet_components/data/Archive';
+import CardWrapper from './components/cardWrapper';
 
 
 function App() {
@@ -100,6 +101,7 @@ function App() {
                 <Route path='/users' element={<Users />} />
                 <Route path="/user/:id" element={<UserDetails />} />
                 <Route path="/albums" element={<Albums />} />
+                <Route path="/cards" element={<CardWrapper />} />
               </Routes>
             </div>
           </div>

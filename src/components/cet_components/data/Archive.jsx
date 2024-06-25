@@ -1,14 +1,28 @@
 import React, { useCallback, useState } from 'react'
 import { useGetData } from '../../../hooks/useGetData'
 import { useGetArchiveData } from '../../../hooks/useGetArchiveData'
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { Breadcrumb } from './Archive-components/Breadcrumb';
 import { ArchiveTable } from './Archive-components/ArchiveTable';
 import ArchiveDetails from './Archive-components/ArchiveDetails';
 import _ from 'lodash';
 
 
+const ArchiveContainer = styled.div`
+height: 100%;
+width: 100%;
+display: flex;
+flex-direction: column;
+`
 
+
+
+const PageContainer = styled.div`
+height: 100%;
+width: 100%;
+display: flex;
+flex-direction: row;
+`
 
 
 
@@ -16,21 +30,7 @@ import _ from 'lodash';
 export function Archive({ entity }) {
 
 
-  const ArchiveContainer = styled.div`
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-  `
 
-
-
-  const PageContainer = styled.div`
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    `
 
 
 
@@ -72,7 +72,7 @@ export function Archive({ entity }) {
           data={data}
         />
 
-        <ArchiveDetails archiveSelection={selectedRowItem} updateItem={updateItem} service={entity}></ArchiveDetails>
+        <ArchiveDetails colsData={data.cols} archiveSelection={selectedRowItem} updateItem={updateItem} service={entity}></ArchiveDetails>
 
       </PageContainer>
     </ArchiveContainer>

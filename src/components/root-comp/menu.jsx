@@ -80,6 +80,11 @@ export default function Menu() {
       route: "",
     },
     {
+      'codice': "",
+      'descrizione': "Cards",
+      route: "cards",
+    },
+    {
       codice: "",
       descrizione: "Archivio Difetti",
       route: "difetti",
