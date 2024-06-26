@@ -9,6 +9,9 @@ export const entityDispatcherUrl = (entity) => {
 const entitySchema = {
     'Difetto': 'archiviodifetti/api/Difetto',
     'Origine': 'archiviodifetti/api/Origine',
+    'Gruppo': 'archiviodifetti/api/Gruppo',
+    'Immaginedifetto': 'archiviodifetti/api/Immaginedifetto',
+
 }
 
 
@@ -46,6 +49,12 @@ export const colsSchema = {
             field: ['origineId', 'descrizione'],
             width: '170px',
             entity: 'Origine'
+        },
+        {
+            header: 'Gruppo',
+            field: ['gruppoId', 'descrizione'],
+            width: '200px',
+            entity: 'Gruppo'
         },
     ]
 }

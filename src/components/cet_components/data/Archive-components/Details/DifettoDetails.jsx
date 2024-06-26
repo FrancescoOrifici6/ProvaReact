@@ -3,7 +3,8 @@ import { styled } from 'styled-components';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import _ from 'lodash';
-import { dataPatch } from '../../../../../services/patch.service';
+import { dataPatch, getEntityById } from '../../../../../services/patch.service';
+import ImageDisplayer from '../../../details-components/ImageDisplayer';
 
 
 const FormLabel = styled.div`
@@ -71,6 +72,8 @@ height: 100%;
 border-radius: 4px;
 background-color: #f2f3f8;
 border: 2px solid #868aa8;
+gap: 20px;
+padding: 0 20px;
 `
 
 
@@ -120,30 +123,43 @@ outline: none !important;
 
 export default function DifettoDetails({ archiveSelection, updateItem, colsData }) {
 
-    const [currentValue, setCurrentValue] = useState(archiveSelection);
+    const [currentValue, setCurrentValue] = useState(_.cloneDeep(archiveSelection));
+    const [difettoImages, setDifettoImages] = useState([]);
 
     console.log('colsdata', colsData);
 
     useEffect(() => {
-        setCurrentValue(archiveSelection);
+        setDifettoImages([]);
+        setCurrentValue(_.cloneDeep(archiveSelection));
+        initImages(archiveSelection);
+        console.log('difettoImages', difettoImages);
     }, [archiveSelection]);
 
 
-    const handleBlur = async () => {
-        if (JSON.stringify(currentValue) !== JSON.stringify(archiveSelection)) {
-            const updated = _.cloneDeep(currentValue);
-            const newValue = await dataPatch('Difetto', currentValue.id, archiveSelection, updated);
+
+    const initImages = async (currentItem) => {
+        if (currentItem && currentItem.immaginedifettosId) {
+            for (let difettoImageId of currentItem.immaginedifettosId) {
+                const newImage = await getEntityById('Immaginedifetto', difettoImageId)
+                setDifettoImages([...difettoImages, newImage]);
+            }
+        }
+    }
+
+
+
+
+
+    const handleBlur = async (updatedValue) => {
+        if (JSON.stringify(updatedValue ? updatedValue : currentValue) !== JSON.stringify(archiveSelection)) {
+            const newValue = await dataPatch('Difetto', currentValue.id, archiveSelection, updatedValue ? updatedValue : currentValue);
             updateItem(newValue);
         }
     };
 
 
 
-    const getDescriptionByValue = (id, entity) => {
 
-        console.log('ssss', id, entity)
-
-    }
 
 
 
@@ -162,13 +178,13 @@ export default function DifettoDetails({ archiveSelection, updateItem, colsData 
 
 
 
-    const handleSelectChange = (ev) => {
+    const handleSelectChange = async (ev) => {
 
+        const newValue = _.cloneDeep(currentValue);
         const { name, value } = ev.target;
-        setCurrentValue(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
+        newValue[name] = Number(value);
+        await handleBlur(newValue);
+        setCurrentValue(newValue);
 
     }
 
@@ -207,7 +223,7 @@ export default function DifettoDetails({ archiveSelection, updateItem, colsData 
                                         <FormLabel>
                                             Nome
                                         </FormLabel>
-                                        <Input name="nome" type='text' onBlur={handleBlur} value={currentValue.nome} onChange={textChange} id="nome-difetto-input"
+                                        <Input name="nome" type='text' onBlur={() => handleBlur()} value={currentValue.nome} onChange={textChange} id="nome-difetto-input"
                                         />
                                     </div>
 
@@ -216,21 +232,24 @@ export default function DifettoDetails({ archiveSelection, updateItem, colsData 
 
 
                             <TabContent>
+
+                                {difettoImages && difettoImages.length && <ImageDisplayer images={difettoImages}></ImageDisplayer>}
+
                                 <div className='flex-row'>
                                     <FormLabel>
                                         Descrizione
                                     </FormLabel>
-                                    <TextArea name="descrizione" className='' type='text' onBlur={handleBlur} value={currentValue.descrizione} onChange={textChange} id="desc-difetto-input" />
+                                    <TextArea name="descrizione" className='' type='text' onBlur={() => handleBlur()} value={currentValue.descrizione} onChange={textChange} id="desc-difetto-input" />
                                 </div>
                                 {colsData && colsData[3] && colsData[3].columnData &&
                                     <div className='flex-row'>
                                         <FormLabel>
                                             Origine
                                         </FormLabel>
-                                        <select name='origine' value={currentValue.origineId} onChange={handleSelectChange}>
+                                        <select name='origineId' value={currentValue.origineId} onChange={handleSelectChange}>
                                             <option value="">Seleziona un'opzione</option>
                                             {colsData[3].columnData.map((option) => (
-                                                <option key={option.id} value={option.id}>
+                                                <option key={option.id} value={option.id} style={{ backgroundColor: option.color }}>
                                                     {option.codice}
                                                 </option>
                                             ))}
@@ -238,6 +257,25 @@ export default function DifettoDetails({ archiveSelection, updateItem, colsData 
 
                                     </div>
                                 }
+
+
+                                {colsData && colsData[4] && colsData[4].columnData &&
+                                    <div className='flex-row'>
+                                        <FormLabel>
+                                            Gruppo
+                                        </FormLabel>
+                                        <select name='gruppoId' value={currentValue.gruppoId} onChange={handleSelectChange}>
+                                            <option value="">Seleziona un'opzione</option>
+                                            {colsData[4].columnData.map((option) => (
+                                                <option key={option.id} value={option.id} style={{ backgroundColor: option.color }}>
+                                                    {option.codice}
+                                                </option>
+                                            ))}
+                                        </select>
+
+                                    </div>
+                                }
+
                             </TabContent>
 
 

@@ -27,3 +27,26 @@ export const dataPatch = async (entity, id, data1, data2) => {
 
 
 };
+
+
+
+export const getEntityById = async (entity, id) => {
+
+    try {
+
+        const entityUrl = entityDispatcherUrl(entity);
+        const tokens = JSON.parse(sessionStorage.getItem('token_current'));
+        const response = await axios.get(entityUrl + `/${id}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${tokens}`
+                }
+            })
+        return response.data;
+
+    } catch (error) {
+        console.error(error);
+    }
+
+
+};
