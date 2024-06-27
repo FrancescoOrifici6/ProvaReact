@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { styled } from 'styled-components';
+import { createEntity } from '../../../services/patch.service';
+
 
 
 
@@ -29,6 +31,8 @@ const ImageDisplayerCommonContainer = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 10px;
+    position: relative;
+    width: 100%;
 `
 
 
@@ -43,15 +47,33 @@ const Image = styled.div`
 `
 
 
+const AdderContainer = styled.div`
+    height: 30px;
+    width: 30px;
+`
 
 
-function ImageDisplayer({ images }) {
+const AddButton = styled.div`
+    background-color: #526ae5;
+    color: #fff;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    .div{
+        font-size: 20px;
+        font-weight: 600;
+    }
+    
+`
 
+function ImageDisplayer({ images, difettoId , updateImage }) {
 
     const [selected, setSelected] = useState(null);
-
-    console.log('immagini', images);
-
 
 
     const selectImage = (selectedImage) => {
@@ -60,19 +82,69 @@ function ImageDisplayer({ images }) {
 
 
 
+
+    const fileLoading = async (file) => {
+        console.log('file loaded => ', file.target.files[0]);
+
+
+        var myReader = new FileReader();
+
+
+        myReader.onloadend = async (e) => {
+
+            const immagineDifetto = {
+                'difettoId': difettoId,
+                'immagine': myReader.result
+            };
+
+            const newValue = await createEntity('Immaginedifetto', immagineDifetto);
+            
+    
+
+
+        }
+
+
+        myReader.readAsDataURL(file.target.files[0]);
+
+
+
+
+
+    }
+
+
+
     return (
         <ImageDisplayerCommonContainer>
-            {selected && selected.id && <ImagePreview>
-                <img src={selected.immagine}></img>
-            </ImagePreview>}
+
+            <AdderContainer>
+                <AddButton>
+                    <div>
+                        <label>
+                            <input type="file" id="all-odl" accept="image/png, image/gif, image/jpeg"
+                                onChange={fileLoading} />
+                            +
+                        </label>
+                    </div>
+                </AddButton>
+            </AdderContainer>
+
+
+            <ImagePreview>
+                {selected && selected.id && <img src={selected.immagine}></img>}
+            </ImagePreview>
+
+
             <ImageDisplayerContainer>
                 {images.map(item =>
-                    <Image onClick={() => selectImage(item)}>
+                    <Image key={item.id} onClick={() => selectImage(item)}>
                         <img src={item.immagine}></img>
                     </Image>
                 )}
             </ImageDisplayerContainer>
-        </ImageDisplayerCommonContainer>
+
+        </ImageDisplayerCommonContainer >
     )
 }
 

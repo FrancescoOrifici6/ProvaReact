@@ -129,9 +129,8 @@ export default function DifettoDetails({ archiveSelection, updateItem, colsData 
     console.log('colsdata', colsData);
 
     useEffect(() => {
-        setDifettoImages([]);
-        setCurrentValue(_.cloneDeep(archiveSelection));
         initImages(archiveSelection);
+        setCurrentValue(_.cloneDeep(archiveSelection));
         console.log('difettoImages', difettoImages);
     }, [archiveSelection]);
 
@@ -139,10 +138,13 @@ export default function DifettoDetails({ archiveSelection, updateItem, colsData 
 
     const initImages = async (currentItem) => {
         if (currentItem && currentItem.immaginedifettosId) {
+            
+            const images = [];
             for (let difettoImageId of currentItem.immaginedifettosId) {
-                const newImage = await getEntityById('Immaginedifetto', difettoImageId)
-                setDifettoImages([...difettoImages, newImage]);
+                images.push(await getEntityById('Immaginedifetto', difettoImageId))
             }
+
+            setDifettoImages(images);
         }
     }
 
@@ -233,7 +235,7 @@ export default function DifettoDetails({ archiveSelection, updateItem, colsData 
 
                             <TabContent>
 
-                                {difettoImages && difettoImages.length && <ImageDisplayer images={difettoImages}></ImageDisplayer>}
+                                {difettoImages && difettoImages.length && <ImageDisplayer  difettoId={currentValue.id}   images={difettoImages}></ImageDisplayer>}
 
                                 <div className='flex-row'>
                                     <FormLabel>

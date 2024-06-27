@@ -7,7 +7,7 @@
   height: 100vh;
 }
 
-.flex-row{
+.flex-row {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -41,6 +41,14 @@
   }
 }
 
+.tab-content > .active {
+  height: calc(100% - 60px);
+}
+
+input[type="file"] {
+  display: none;
+}
+
 .card {
   padding: 2em;
 }
@@ -70,7 +78,7 @@
   gap: 20px;
 }
 
-.gap-10{
+.gap-10 {
   gap: 10px;
 }
 
