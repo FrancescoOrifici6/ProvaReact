@@ -53,7 +53,7 @@ export const colsSchema = {
         {
             header: 'Gruppo',
             field: ['gruppoId', 'descrizione'],
-            width: '200px',
+            width: '250px',
             entity: 'Gruppo'
         },
     ]

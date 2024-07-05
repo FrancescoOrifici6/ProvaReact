@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { styled } from 'styled-components';
 import { createEntity } from '../../../services/patch.service';
+import { Spinner } from 'react-bootstrap';
 
 
 
@@ -33,6 +34,7 @@ const ImageDisplayerCommonContainer = styled.div`
     gap: 10px;
     position: relative;
     width: 100%;
+    padding: 20px 0;
 `
 
 
@@ -71,9 +73,22 @@ const AddButton = styled.div`
     
 `
 
-function ImageDisplayer({ images, difettoId , updateImage }) {
+function ImageDisplayer({ images, difettoId, updateImage, loader }) {
 
     const [selected, setSelected] = useState(null);
+
+
+
+    useEffect(() => {
+
+        if (images && images.length) {
+            setSelected(images[0]);
+        } else {
+            setSelected(null);
+        }
+
+    }, [images])
+
 
 
     const selectImage = (selectedImage) => {
@@ -98,9 +113,8 @@ function ImageDisplayer({ images, difettoId , updateImage }) {
             };
 
             const newValue = await createEntity('Immaginedifetto', immagineDifetto);
-            
-    
 
+            updateImage(newValue);
 
         }
 
@@ -115,37 +129,61 @@ function ImageDisplayer({ images, difettoId , updateImage }) {
 
 
 
-    return (
-        <ImageDisplayerCommonContainer>
+    if (loader) {
 
-            <AdderContainer>
-                <AddButton>
-                    <div>
-                        <label>
-                            <input type="file" id="all-odl" accept="image/png, image/gif, image/jpeg"
-                                onChange={fileLoading} />
-                            +
-                        </label>
-                    </div>
-                </AddButton>
-            </AdderContainer>
+        return (
+            <div className='flexed-center'>
+                <Spinner animation="border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </Spinner>
+            </div>)
 
 
-            <ImagePreview>
-                {selected && selected.id && <img src={selected.immagine}></img>}
-            </ImagePreview>
+
+    } else {
+
+        return (
+            <ImageDisplayerCommonContainer>
+
+                <AdderContainer>
+                    <AddButton>
+                        <div>
+                            <label>
+                                <input type="file" id="all-odl" accept="image/png, image/gif, image/jpeg"
+                                    onChange={fileLoading} />
+                                +
+                            </label>
+                        </div>
+                    </AddButton>
+                </AdderContainer>
 
 
-            <ImageDisplayerContainer>
-                {images.map(item =>
-                    <Image key={item.id} onClick={() => selectImage(item)}>
-                        <img src={item.immagine}></img>
-                    </Image>
-                )}
-            </ImageDisplayerContainer>
+                <ImagePreview>
+                    {selected && selected.id && <img src={selected.immagine}></img>}
+                </ImagePreview>
 
-        </ImageDisplayerCommonContainer >
-    )
+
+
+                <ImageDisplayerContainer>
+                    {images && images.length &&
+                        images.map(item =>
+                            <Image selected={selected} key={item.id} onClick={() => selectImage(item)}>
+                                <img src={item.immagine}></img>
+                            </Image>
+                        )
+                    }
+                </ImageDisplayerContainer>
+
+
+                {!images || images.length <= 0 &&
+                    <div> </div>
+                }
+
+
+
+            </ImageDisplayerCommonContainer >
+        )
+    }
 }
 
 export default ImageDisplayer

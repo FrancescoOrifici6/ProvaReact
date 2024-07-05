@@ -45,8 +45,25 @@
   height: calc(100% - 60px);
 }
 
+.flexed-center{
+  height: 50px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+
 input[type="file"] {
   display: none;
+}
+
+.common-select {
+  width: 100%;
+  background-color: #e2e6fb;
+  color: #526ae5;
+  border: none;
 }
 
 .card {
