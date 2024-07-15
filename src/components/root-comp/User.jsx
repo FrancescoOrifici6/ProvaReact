@@ -1,13 +1,15 @@
 import React from 'react'
 
-export default function User({ user }) {
+export default function User({ user, loggedUser }) {
 
 
 
 
 
 
-    if (user)
+    if (user && !loggedUser) {
+
+
         return (
 
             <div className='user-container'>
@@ -28,4 +30,23 @@ export default function User({ user }) {
 
             </div >
         )
+    } else if (user && loggedUser) {
+        <div className='user-container'>
+
+            <div className='user-logo' style={{ backgroundColor: '#526ae5', color: '#fff' }}>
+                {/* {user.codice} */}
+            </div>
+
+            <div className='user-info'>
+                <div>
+                    {user.given_name}
+                </div>
+                <div>
+                    {user.family_name}
+                </div>
+
+            </div>
+
+        </div >
+    }
 }

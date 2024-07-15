@@ -112,6 +112,11 @@ input[type="file"] {
   position: absolute;
   bottom: 0;
 }
+.flexed-horizon{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
 
 /* LOGIN */
 

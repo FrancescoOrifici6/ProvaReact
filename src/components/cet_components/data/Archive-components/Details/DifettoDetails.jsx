@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { cloneElement, useEffect, useRef, useState } from 'react'
 import { styled } from 'styled-components';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
@@ -7,6 +7,7 @@ import { dataPatch, getEntityById } from '../../../../../services/patch.service'
 import ImageDisplayer from '../../../details-components/ImageDisplayer';
 import { useGetMultipleRows } from '../../../../../hooks/useGetMultipleRowsByIds';
 
+// styled components definitions 
 
 const FormLabel = styled.div`
 color: #868aa8;
@@ -126,7 +127,7 @@ export default function DifettoDetails({ archiveSelection, updateItem, colsData 
 
     const [currentValue, setCurrentValue] = useState(_.cloneDeep(archiveSelection));
     // const [difettoImages, setDifettoImages] = useState([]);
-    const { data: difettoImages, loading, updateData } = useGetMultipleRows(archiveSelection ? archiveSelection['immaginedifettosId'] : [], 'Immaginedifetto' , archiveSelection ? archiveSelection['id'] : null);
+    const { data: difettoImages, loading, updateData } = useGetMultipleRows(archiveSelection ? archiveSelection['immaginedifettosId'] : [], 'Immaginedifetto', archiveSelection ? archiveSelection['id'] : null);
 
 
     console.log('colsdata', colsData);
@@ -155,6 +156,19 @@ export default function DifettoDetails({ archiveSelection, updateItem, colsData 
 
 
 
+    const updateImmagineDifetto = (addedItem) => {
+       
+        updateData(addedItem);
+
+        const clone = _.cloneDeep(archiveSelection);
+        clone.immaginedifettosId.push(addedItem.id);
+        updateItem(clone);
+    
+    }
+
+
+
+
 
     const handleBlur = async (updatedValue) => {
         if (JSON.stringify(updatedValue ? updatedValue : currentValue) !== JSON.stringify(archiveSelection)) {
@@ -163,13 +177,6 @@ export default function DifettoDetails({ archiveSelection, updateItem, colsData 
         }
     };
 
-
-
-
-
-
-
-    // styled components definitions
 
 
     const textChange = (ev) => {
@@ -246,7 +253,7 @@ export default function DifettoDetails({ archiveSelection, updateItem, colsData 
 
                             <TabContent>
 
-                                <ImageDisplayer difettoId={currentValue.id} images={difettoImages} loader={loading}  updateImage={updateData}></ImageDisplayer>
+                                <ImageDisplayer difettoId={currentValue.id} images={difettoImages} loader={loading} updateImage={updateImmagineDifetto}></ImageDisplayer>
 
                                 <div className='flex-row'>
                                     <FormLabel>
@@ -294,9 +301,6 @@ export default function DifettoDetails({ archiveSelection, updateItem, colsData 
 
 
                         </Tab>
-                        <Tab eventKey="History" title="History">
-
-                        </Tab>
 
                     </Tabs>
 
@@ -304,9 +308,10 @@ export default function DifettoDetails({ archiveSelection, updateItem, colsData 
             </DetailsContainer>
         )
     } else {
-        return
-        <div>
+        return (
+            <div>
 
-        </div>
+            </div>
+        )
     }
 }

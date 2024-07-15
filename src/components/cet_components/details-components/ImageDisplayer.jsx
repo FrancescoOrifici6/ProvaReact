@@ -2,6 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { styled } from 'styled-components';
 import { createEntity } from '../../../services/patch.service';
 import { Spinner } from 'react-bootstrap';
+import { GoChevronLeft } from "react-icons/go";
+import { GoChevronRight } from "react-icons/go";
+import CommonButtonIcon from "../../common-components/button-icon"
+
+
 
 
 
@@ -17,10 +22,11 @@ const ImagePreview = styled.div`
     display: flex;
     align-items: center;
     height: 100px;
-    width: 100px;
+    width: 100%;
+
     img{
-        width: 100%;
-        height: 100%;    
+        width:calc(100%  - 280px);
+        height: 100px;    
     }
     `
 
@@ -39,7 +45,8 @@ const ImageDisplayerCommonContainer = styled.div`
 
 
 const Image = styled.div`
-    border: 1px solid #868aa8;
+
+    border:  ${props => (props?.selected?.id === props?.key ? '3px solid #526ae5' : '1px solid #868aa8')};  
     width: 30px;
     height: 30px;
     img{
@@ -93,6 +100,31 @@ function ImageDisplayer({ images, difettoId, updateImage, loader }) {
 
     const selectImage = (selectedImage) => {
         setSelected(selectedImage);
+    }
+
+
+
+    const imageNavigation = (navigationFlag) => {
+
+        const currentIndex = images.findIndex(item => item.id === selected.id)
+
+        switch (navigationFlag) {
+
+            case 'left':
+                if (currentIndex >= 0) {
+                    const newIndex = currentIndex - 1;
+                    setSelected(images[newIndex]);
+                }
+                break;
+
+
+            case 'right':
+                if (currentIndex < (images.length - 1)) {
+                    const newIndex = currentIndex + 1;
+                    setSelected(images[newIndex]);
+                }
+                break;
+        }
     }
 
 
@@ -159,7 +191,14 @@ function ImageDisplayer({ images, difettoId, updateImage, loader }) {
 
 
                 <ImagePreview>
-                    {selected && selected.id && <img src={selected.immagine}></img>}
+                    {selected && selected.id &&
+                        <div className='flexed-horizon' style={{width: '100%', justifyContent: 'center', gap: '20px'}}>
+                            <CommonButtonIcon icon={<GoChevronLeft width={'2em'} />} actionToCall={() => imageNavigation('left')} > </CommonButtonIcon>
+                            <img src={selected.immagine}></img>
+                            <CommonButtonIcon icon={<GoChevronRight width={'2em'} />} actionToCall={() => imageNavigation('right')}> </CommonButtonIcon>
+                        </div>
+
+                    }
                 </ImagePreview>
 
 
@@ -167,7 +206,7 @@ function ImageDisplayer({ images, difettoId, updateImage, loader }) {
                 <ImageDisplayerContainer>
                     {images && images.length &&
                         images.map(item =>
-                            <Image selected={selected} key={item.id} onClick={() => selectImage(item)}>
+                            <Image selected={selected}  key={item.id} onClick={() => selectImage(item)}>
                                 <img src={item.immagine}></img>
                             </Image>
                         )

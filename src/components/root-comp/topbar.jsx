@@ -2,20 +2,12 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 import User from './User';
 import { AiOutlineLogout } from "react-icons/ai";
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { useLogout } from '../../hooks/useUserManager';
 import { useNavigate } from 'react-router-dom';
+import { useKeycloak } from '@react-keycloak/web';
 
-
-export default function Topbar({ updateLogin }) {
-
-
-    const nav = useNavigate();
-
-
-    const logout = useLogout();
-
-    const Logout = styled.div`
+const Logout = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -26,6 +18,17 @@ export default function Topbar({ updateLogin }) {
         width: 30px;
     }
   `
+
+export default function Topbar({ updateLogin }) {
+
+
+    const nav = useNavigate();
+
+    const { keycloak, initialized } = useKeycloak();
+
+    const logout = useLogout();
+
+
 
 
     const gotoUserPage = () => {
@@ -42,19 +45,19 @@ export default function Topbar({ updateLogin }) {
 
 
 
-    const loggedUser = useSelector((state) => state.logged.value)
+    console.log('initial info => ', keycloak);
 
 
+    // <User user={loggedUser} ></User>
 
-    console.log('userLogged', loggedUser);
 
     return (
         <div className='topbar'>
 
-            {loggedUser && loggedUser.codice &&
+            {keycloak && initialized &&
 
                 <div onClick={gotoUserPage}>
-                    <User user={loggedUser} ></User>
+                    <User user={keycloak} loggedUser={true} ></User>
                 </div>
             }
 
