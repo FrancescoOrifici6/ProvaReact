@@ -70,6 +70,7 @@ export function Archive({ entity }) {
           selectedRow={selectedRowItem}
           handleSelection={handleRowSelection}
           data={data}
+          updateItem={updateItem}
         />
 
         <ArchiveDetails colsData={data.cols} archiveSelection={selectedRowItem} updateItem={updateItem} service={entity}></ArchiveDetails>

@@ -31,30 +31,40 @@ export const colsSchema = {
         {
             header: 'ID',
             field: ['id'],
-            width: '70px'
+            width: '70px',
+            editable: false,
+            type: 'text' 
         },
         {
             header: 'Nome',
             field: ['nome'],
-            width: '270px'
+            width: '270px',
+            editable: true,
+            type: 'text'
         },
         {
             header: 'Data',
             field: ['creazione'],
             width: '170px',
-            format: 'dd/mm/YYYY'
+            format: 'dd/mm/YYYY',
+            editable: false,
+            type: 'date'
         },
         {
             header: 'Origine',
             field: ['origineId', 'descrizione'],
             width: '170px',
-            entity: 'Origine'
+            entity: 'Origine',
+            editable: true,
+            type: 'select'
         },
         {
             header: 'Gruppo',
             field: ['gruppoId', 'descrizione'],
             width: '250px',
-            entity: 'Gruppo'
+            entity: 'Gruppo',
+            editable: true,
+            type: 'select'
         },
     ]
 }
