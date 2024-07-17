@@ -82,6 +82,34 @@ export function ArchiveTable({ serviceName, handleSelection, data, selectedRow, 
     // }
 
 
+
+
+    // Ascoltatore Eventi mouse fuori tabella
+    // Primo useEffect per gestire il clic fuori dalla tabella
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (tableRef.current && !tableRef.current.contains(event.target)) {
+                // reset delle coordinate di modificabilità
+                setTimeout(() => {
+                    setEditableCoordinates({
+                        row: null,
+                        col: null
+                    });
+                }, 250);
+
+            }
+        };
+
+        // Aggiunge l'evento di clic al documento
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            // Rimuove l'evento di clic quando il componente viene smontato
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+
     useEffect(() => {
         console.log('use effect')
         if (tableRef && selectedRow) {

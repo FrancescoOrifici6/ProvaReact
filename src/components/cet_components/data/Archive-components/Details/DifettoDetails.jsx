@@ -204,7 +204,6 @@ export default function DifettoDetails({ archiveSelection, updateItem, colsData 
 
 
     const getSelectValue = (currentValue) => {
-        console.log('current.V', currentValue);
         return currentValue ? currentValue : '';
     }
 
