@@ -18,10 +18,14 @@ import { Archive } from './components/cet_components/data/Archive';
 import CardWrapper from './components/cardWrapper';
 
 
+
+export const MAX_WIDTH = 'calc(100% - 70px)';
+export const LESS_WIDTH = 'calc(100% - 260px)';
+
+
 function App() {
 
-
-
+  const [opened, setOpened] = useState(false);
 
   // keycloak hook
   const keycloak = useKeycloak()
@@ -30,10 +34,10 @@ function App() {
 
   console.log('keycloak', keycloak);
 
-  if(keycloak.keycloak.token){
+  if (keycloak.keycloak.token) {
     tokenHandling(keycloak.keycloak.token)
   }
-  
+
   // if(keycloak.keycloak.authenticated){
   //   setAuthorizationToken('Bearer' + keycloak.keycloak.token)
   // }
@@ -83,6 +87,17 @@ function App() {
   // }
 
 
+  const handleOpening = () => {
+    setOpened(prev => !prev);
+  }
+
+
+
+  const menuExpansionControl = (expansionParameter) => {
+    console.log(expansionParameter);
+  };
+
+
   if (keycloak.keycloak.authenticated === false) {
     return (
       <div>NOT LOGGED</div>
@@ -93,11 +108,11 @@ function App() {
         <div className='app-container'>
           <Topbar />
           <div className='custom-container'>
-            <Menu />
-            <div className='common-container' >
+            <Menu onToggle={handleOpening} opened={opened} />
+            <div className='common-container' style={{ width: !opened ? MAX_WIDTH : LESS_WIDTH }} >
               <Routes>
                 <Route path='/' element={<h1>home</h1>} />
-                <Route path='/difetti' element={<Archive entity="Difetto"/>} />
+                <Route path='/difetti' element={<Archive entity="Difetto" />} />
                 <Route path='/users' element={<Users />} />
                 <Route path="/user/:id" element={<UserDetails />} />
                 <Route path="/albums" element={<Albums />} />

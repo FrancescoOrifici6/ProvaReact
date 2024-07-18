@@ -77,9 +77,6 @@ export function Archive({ entity }) {
 
       </PageContainer>
     </ArchiveContainer>
-    // </ArchiveContainer>
-
-
   )
 }
 

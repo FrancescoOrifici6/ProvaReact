@@ -4,15 +4,10 @@ import styled from 'styled-components';
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
 
 
-export default function Menu() {
+export default function Menu({ onToggle, opened }) {
 
 
   const [menu, setMenu] = useState([]);
-
-
-  const [opened, setOpened] = useState(false);
-
-
 
 
 
@@ -98,9 +93,6 @@ export default function Menu() {
 
 
 
-  const handleOpening = () => {
-    setOpened(prev => !prev)
-  }
 
 
 
@@ -127,11 +119,12 @@ export default function Menu() {
   if (menu && menu.length && menu.length > 0) {
     return (
       <div className='menu-container-2' style={{ width: opened ? '260px' : '70px' }}>
-        <ToggleBar onClick={handleOpening}>
+
+        <ToggleBar onClick={onToggle}>
           {opened && <BsChevronDoubleLeft />}
           {!opened && <BsChevronDoubleRight />}
-
         </ToggleBar>
+
         {menu.map((menuItem, index) =>
           <MenuItem key={index}>
             {opened && <Link to={`/${menuItem.route}`}> {menuItem.descrizione} {menuItem.root}</Link>}
