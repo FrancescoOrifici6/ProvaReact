@@ -158,6 +158,8 @@ export function ArchiveTable({ serviceName, handleSelection, data, selectedRow, 
 
         if (currentColumn && currentColumn.editable) {
             setEditableCoordinates({ row: rowIndex, col: colIndex });
+        } else {
+            setEditableCoordinates({ row: null, col: null });
         }
 
     }
