@@ -92,12 +92,6 @@ function App() {
   }
 
 
-
-  const menuExpansionControl = (expansionParameter) => {
-    console.log(expansionParameter);
-  };
-
-
   if (keycloak.keycloak.authenticated === false) {
     return (
       <div>NOT LOGGED</div>

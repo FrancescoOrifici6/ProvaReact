@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { styled } from 'styled-components';
 import { ArchiveCell } from './ArchiveCell';
-import { deepClone } from 'fast-json-patch';
-import { dataPatch } from '../../../../services/patch.service';
+import { createEntity, dataPatch } from '../../../../services/patch.service';
 
 
 const TableContainer = styled.div`
         display: flex;
         align-items: center;
         padding: 20px;
+        position: relative;
     `
 
 const Column = styled.th`
@@ -23,6 +23,25 @@ const Column = styled.th`
     justify-content: space-between;
     width: ${(props) => props.width}; // Access to the prop
     `
+
+
+const AddRowButton = styled.div`
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 50%;
+    position: absolute;
+    left: 5px;
+    top: 0px;
+    width: 30px;
+    height: 30px;
+    background-color: #526ae5;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 80;
+    transition: all .3s;
+`
 
 
 const Thead = styled.tr`
@@ -61,7 +80,7 @@ const Cell = styled.td`
       width: ${(props) => props.width}; // Access to the prop
    `
 
-export function ArchiveTable({ serviceName, handleSelection, data, selectedRow, updateItem }) {
+export function ArchiveTable({ serviceName, handleSelection, data, selectedRow, updateItem, addRow, addingRow }) {
 
     const tableRef = useRef(null);
     const scrollPosition = useRef(0);
@@ -144,6 +163,32 @@ export function ArchiveTable({ serviceName, handleSelection, data, selectedRow, 
     }
 
 
+    const getFirstEditableColumn = () => {
+
+        for (let i = 0; i < data.cols.length; i++) {
+            if (data.cols[i].editable) {
+                return i;
+            }
+        }
+
+    }
+
+
+
+
+    const handleRowAdding = (e) => {
+        addingRow();
+
+        setTimeout(() => {
+            setEditableCoordinates({
+                row: 0,
+                col: getFirstEditableColumn()
+            });
+        }, 250);
+
+    }
+
+
 
     const handleCellUpdating = async (newRow, linkedCol) => {
 
@@ -151,12 +196,25 @@ export function ArchiveTable({ serviceName, handleSelection, data, selectedRow, 
 
         if (newRow && linkedCol) {
 
-            const dataRow = data.rows.find(item => item.id === newRow.id);
 
-            if (JSON.stringify(dataRow) !== JSON.stringify(newRow)) {
+            // row update 
+            if (newRow.id) {
 
-                const newValue = await dataPatch(serviceName, dataRow.id, dataRow, newRow);
+                const dataRow = data.rows.find(item => item.id === newRow.id);
+
+                if (JSON.stringify(dataRow) !== JSON.stringify(newRow)) {
+
+                    const newValue = await dataPatch(serviceName, dataRow.id, dataRow, newRow);
+                    updateItem(newValue);
+
+                }
+            } else {
+
+                // row creation
+
+                const newValue = await createEntity(serviceName, newRow);
                 updateItem(newValue);
+
 
             }
 
@@ -178,6 +236,11 @@ export function ArchiveTable({ serviceName, handleSelection, data, selectedRow, 
     if (data && data.rows && data.cols && data.cols.length && data.rows.length) {
         return (
             <TableContainer>
+                {addRow &&
+                    <AddRowButton onClick={handleRowAdding}  >
+                        +
+                    </AddRowButton>
+                }
                 <Table>
 
                     <thead>

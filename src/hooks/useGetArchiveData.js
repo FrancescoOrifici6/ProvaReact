@@ -5,6 +5,7 @@ import { columnsDispatcher, entityDispatcherUrl } from "../services/entityHandle
 export const useGetArchiveData = (entity) => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [addRow, setAddRow] = useState(false);
 
     useEffect(() => {
         // const token = JSON.parse(sessionStorage.getItem('token_current')).token
@@ -57,6 +58,32 @@ export const useGetArchiveData = (entity) => {
     }
 
 
+    const getObjectKeysByCols = (currentColumns) => {
+
+        const newArchiveItem = {};
+
+        for (let col of currentColumns) {
+
+            if (col.field && col.field.length) {
+                newArchiveItem[col.field[0]] = null;
+            }
+
+        }
+
+        return newArchiveItem;
+    }
+
+
+
+    const addingRow = () => {
+        const newArchiveItem = getObjectKeysByCols(data.cols);
+        const clone = data;
+        clone.rows.unshift(newArchiveItem)
+        setData(clone);
+        setAddRow(true);
+    }
+
+
     const fetchColsData = async (col) => {
 
         const tokens = JSON.parse(sessionStorage.getItem('token_current'));
@@ -81,18 +108,31 @@ export const useGetArchiveData = (entity) => {
 
     const dataUpdate = (rowToAdd) => {
 
-        console.log(rowToAdd, data);
         const clone = data;
 
-        for(let item of clone.rows){
-            if(item.id === rowToAdd.id){
-                item = Object.assign(item, item, rowToAdd);
+        if (addRow) {
+
+            for (let item of clone.rows) {
+                if (item.id === null) {
+                    item = Object.assign(item, item, rowToAdd);
+                }
             }
+
+            setAddRow(false);
+
+        } else {
+
+            for (let item of clone.rows) {
+                if (item.id === rowToAdd.id) {
+                    item = Object.assign(item, item, rowToAdd);
+                }
+            }
+
         }
 
         setData(clone);
 
     }
 
-    return { data, loading, dataUpdate };
+    return { data, loading, dataUpdate, addingRow };
 };
