@@ -60,6 +60,8 @@ export const colsSchema = {
             entity: 'Origine',
             editable: true,
             type: 'select',
+            sortable: true,
+
         },
         {
             header: 'Gruppo',
@@ -67,7 +69,9 @@ export const colsSchema = {
             width: '250px',
             entity: 'Gruppo',
             editable: true,
-            type: 'select'
+            type: 'select',
+            sortable: true,
+
         },
     ]
 }

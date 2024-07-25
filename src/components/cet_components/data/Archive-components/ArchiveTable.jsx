@@ -259,6 +259,15 @@ export function ArchiveTable({ serviceName, handleSelection, data, selectedRow, 
     }
 
 
+
+    const multipleFieldRendering = (currentRow, currentCol) => {
+
+        const deepEntityRendering = currentCol.field.length;
+
+        const currentVal = currentCol.columnData.find(item => item.id === currentRow[currentCol.field[0]]);
+        return currentVal && currentVal[currentCol.field[deepEntityRendering - 1]] ? currentVal[currentCol.field[deepEntityRendering - 1]] : '';
+    }
+
     const archiveTableSortSwitch = (data1, data2) => {
 
 
@@ -295,12 +304,12 @@ export function ArchiveTable({ serviceName, handleSelection, data, selectedRow, 
 
 
 
-            // case 'select':
-            //     const select1 = this.tableCellPipe.transform(data1, event.linkedCol)
-            //     const select2 = this.tableCellPipe.transform(data2, event.linkedCol)
-            //     let resultSelect = null;
-            //     resultSelect = select1.localeCompare(select2);
-            //     return (event.order * resultSelect);
+            case 'select':
+                const select1 = multipleFieldRendering(data1, sortColumn)
+                const select2 = multipleFieldRendering(data2, sortColumn)
+                let resultSelect = null;
+                resultSelect = select1.localeCompare(select2);
+                return (order * resultSelect);
 
 
 

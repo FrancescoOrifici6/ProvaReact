@@ -19,10 +19,6 @@ export const TableSort = ({ column, sortColumn, applySort }) => {
 
 
 
- 
-
-
-
   const handleSortChange = (sortParam) => {
     const cloneCol = deepClone(column);
     cloneCol.sort = sortParam;
