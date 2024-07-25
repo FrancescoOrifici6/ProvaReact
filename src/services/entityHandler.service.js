@@ -33,14 +33,16 @@ export const colsSchema = {
             field: ['id'],
             width: '70px',
             editable: false,
-            type: 'text' 
+            type: 'number',
+            sortable: true,
         },
         {
             header: 'Nome',
             field: ['nome'],
             width: '270px',
             editable: true,
-            type: 'text'
+            type: 'text',
+            sortable: true,
         },
         {
             header: 'Data',
@@ -48,7 +50,8 @@ export const colsSchema = {
             width: '170px',
             format: 'dd/mm/YYYY',
             editable: false,
-            type: 'date'
+            type: 'date',
+            sortable: true,
         },
         {
             header: 'Origine',
@@ -56,7 +59,7 @@ export const colsSchema = {
             width: '170px',
             entity: 'Origine',
             editable: true,
-            type: 'select'
+            type: 'select',
         },
         {
             header: 'Gruppo',

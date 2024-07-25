@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { styled } from 'styled-components';
 import { ArchiveCell } from './ArchiveCell';
 import { createEntity, dataPatch } from '../../../../services/patch.service';
+import { TableSort } from './TableSort';
 
 
 const TableContainer = styled.div`
@@ -86,6 +87,9 @@ export function ArchiveTable({ serviceName, handleSelection, data, selectedRow, 
     const scrollPosition = useRef(0);
 
 
+
+    const [sortColumn, setSortColumn] = useState();
+
     const [editableCoordinates, setEditableCoordinates] =
         useState({
             row: null,
@@ -100,6 +104,12 @@ export function ArchiveTable({ serviceName, handleSelection, data, selectedRow, 
     //     // handleSelection(currentRow);
     // }
 
+
+
+
+    const applySort = (columnToSort) => {
+        setSortColumn(columnToSort);
+    }
 
 
 
@@ -192,6 +202,16 @@ export function ArchiveTable({ serviceName, handleSelection, data, selectedRow, 
 
 
 
+    const sortData = () => {
+        return
+    }
+
+
+
+
+
+
+
     const handleCellUpdating = async (newRow, linkedCol) => {
 
 
@@ -229,6 +249,78 @@ export function ArchiveTable({ serviceName, handleSelection, data, selectedRow, 
 
 
 
+    const archiveTableSort = (a, b) => {
+
+        if (!sortColumn) {
+            return 1;
+        } else {
+            return archiveTableSortSwitch(a, b);
+        }
+    }
+
+
+    const archiveTableSortSwitch = (data1, data2) => {
+
+
+        const order = sortColumn.sort === 'asc' ? 1 : -1;
+
+
+        switch (sortColumn.type) {
+
+            case 'number':
+                const v1 = data1[sortColumn.field[sortColumn.field.length - 1]] ? data1[sortColumn.field[sortColumn.field.length - 1]] : 0;
+                const v2 = data2[sortColumn.field[sortColumn.field.length - 1]] ? data2[sortColumn.field[sortColumn.field.length - 1]] : 0;
+                let result = null;
+                result = (v1 < v2) ? -1 : (v1 > v2) ? 1 : 0;
+                return (order * result);
+
+
+
+            case 'date':
+                const d1 = data1[sortColumn.field[sortColumn.field.length - 1]] ? data1[sortColumn.field[sortColumn.field.length - 1]] : 0;
+                const d2 = data2[sortColumn.field[sortColumn.field.length - 1]] ? data2[sortColumn.field[sortColumn.field.length - 1]] : 0;
+                let resultd = 0;
+                resultd = (d1 < d2) ? -1 : (d1 > d2) ? 1 : 0;
+                return (order * resultd);
+
+
+
+
+            case 'text':
+                const n1 = data1[sortColumn.field[sortColumn.field.length - 1]] ? data1[sortColumn.field[sortColumn.field.length - 1]] : '';
+                const n2 = data2[sortColumn.field[sortColumn.field.length - 1]] ? data2[sortColumn.field[sortColumn.field.length - 1]] : '';
+                let resultn = null;
+                resultn = n1.localeCompare(n2);
+                return (order * resultn);
+
+
+
+            // case 'select':
+            //     const select1 = this.tableCellPipe.transform(data1, event.linkedCol)
+            //     const select2 = this.tableCellPipe.transform(data2, event.linkedCol)
+            //     let resultSelect = null;
+            //     resultSelect = select1.localeCompare(select2);
+            //     return (event.order * resultSelect);
+
+
+
+            // case 'autocomplete':
+            //   const auto1 = this.getDataFromStored.transform(data1, event.linkedCol)
+            //   const auto2 = this.tableCellPipe.transform(data2, event.linkedCol)
+            //   let resultSelect = null;
+            //   resultSelect = select1.localeCompare(select2);
+            //   return (event.order * resultSelect);
+
+
+            default:
+                return;
+        }
+
+    };
+
+
+
+
 
 
 
@@ -239,7 +331,7 @@ export function ArchiveTable({ serviceName, handleSelection, data, selectedRow, 
         return (
             <TableContainer>
                 {addRow &&
-                    <AddRowButton onClick={handleRowAdding}  >
+                    <AddRowButton onClick={handleRowAdding}>
                         +
                     </AddRowButton>
                 }
@@ -247,12 +339,19 @@ export function ArchiveTable({ serviceName, handleSelection, data, selectedRow, 
 
                     <thead>
                         <Thead>
-                            {data.cols.map(col => <Column width={col.width} key={col.field}>{col.header}</Column>)}
+                            {data.cols.map(col =>
+                                <Column width={col.width} key={col.field}>
+
+                                    {col.header}
+
+                                    {col.sortable && <TableSort applySort={applySort} sortColumn={sortColumn} key={col.header} column={col} />}
+
+                                </Column>)}
                         </Thead>
                     </thead>
 
                     <Tbody ref={tableRef}>
-                        {data.rows.map((row, rowIndex) =>
+                        {data.rows.sort((a, b) => archiveTableSort(a, b)).map((row, rowIndex) =>
                             <Trow onClick={() => handleRow(row)} id={row.id} key={row.id} selectedid={selectedRow?.id}>
                                 {data.cols.map((col, colIndex) =>
 
