@@ -3,6 +3,7 @@ import { styled } from 'styled-components';
 import { ArchiveCell } from './ArchiveCell';
 import { createEntity, dataPatch } from '../../../../services/patch.service';
 import { TableSort } from './TableSort';
+import { TableFilter } from './TableFilter';
 
 
 const TableContainer = styled.div`
@@ -81,14 +82,13 @@ const Cell = styled.td`
       width: ${(props) => props.width}; // Access to the prop
    `
 
-export function ArchiveTable({ serviceName, handleSelection, data, selectedRow, updateItem, addRow, addingRow }) {
+export function ArchiveTable({ serviceName, handleSelection, data, selectedRow, updateItem, addRow, addingRow, updateColumns }) {
 
     const tableRef = useRef(null);
     const scrollPosition = useRef(0);
 
-
-
     const [sortColumn, setSortColumn] = useState();
+
 
     const [editableCoordinates, setEditableCoordinates] =
         useState({
@@ -97,18 +97,38 @@ export function ArchiveTable({ serviceName, handleSelection, data, selectedRow, 
         });
 
 
-    console.log('difetti , entity', data, tableRef, selectedRow);
-
-    // const handleRow = (currentRow) => {
-    //     setSelectedRow(currentRow.id);
-    //     // handleSelection(currentRow);
-    // }
-
-
 
 
     const applySort = (columnToSort) => {
         setSortColumn(columnToSort);
+    }
+
+
+    const getFilteredColumn = () => {
+
+        let filterSet = [];
+
+        if (data && data.cols) {
+
+            for (let index = 0; index < data.cols.length; index++) {
+
+                const element = data.cols[index];
+
+                if (element.filterValue && element.filterValue !== '') {
+                    filterSet.push(element);
+                }
+
+            }
+
+            return filterSet;
+        }
+    }
+
+
+    const applyFilter = (columnToFilter) => {
+
+        updateColumns(columnToFilter);
+        // const filtered = getFilteredColumn(columnToFilter);
     }
 
 
@@ -328,6 +348,132 @@ export function ArchiveTable({ serviceName, handleSelection, data, selectedRow, 
     };
 
 
+    const isValueMatching = (valoreFiltro, cellVal, colonna, rowVal) => {
+
+
+        switch (colonna.type) {
+
+            case 'text':
+                // string filter matching
+                let string = cellVal ? cellVal.toLocaleLowerCase() : '';
+                let filterString = valoreFiltro ? valoreFiltro.toLocaleLowerCase() : '';
+
+                string = string.split(' ');
+                let match = false;
+
+                for (let part of string) {
+
+                    if (part.startsWith(filterString)) {
+                        match = true;
+                    }
+
+                }
+                return match;
+
+
+
+            case 'date':
+                if (valoreFiltro && valoreFiltro.length) {
+                    const minDate = valoreFiltro[0].getTime();
+                    const maxDate = valoreFiltro[1].getTime() + (23 * 3600000);   // aggoiunta di 23 ore
+                    return cellVal >= minDate && cellVal <= maxDate;
+                }
+                return false;
+
+
+
+
+
+            case 'select':
+                if (cellVal) {
+                    return valoreFiltro.includes(cellVal);
+                } else {
+                    return;
+                }
+
+
+
+
+            // case 'autocomplete':
+            //     if (colonna.label === 'CLIENTE_CAPITOLATO') {
+
+            //         if ((valoreFiltro === this.getDataFromStored(rowVal, colonna, this.storedData) || this.isIncludedInCorrelati(rowVal, valoreFiltro))) {
+            //             return true;
+            //         } else {
+            //             return false;
+            //         }
+
+
+
+            //     } else {
+            //         if (cellVal && valoreFiltro === this.getDataFromStored(rowVal, colonna, this.storedData)) {
+            //             return true;
+            //         } else {
+            //             return false;
+            //         }
+
+            //     }
+
+
+
+            // case 'multi-select-icon':
+
+            //     const containsAll = valoreFiltro.every((element: any) => {
+            //         return cellVal.includes(element);
+            //     });
+            //     return containsAll;
+
+
+
+
+
+            default:
+                return true;
+        }
+
+    }
+
+
+
+
+
+    const archiveTableFilter = (row) => {
+
+        const filtered = getFilteredColumn();
+
+        if (filtered.length === 0) {
+            return row;
+        } else {
+
+            let match = true;
+
+            for (let col of filtered) {
+
+
+                if (col.filterValue && col.filterValue !== '') {
+
+                    const filterVal = col.filterValue
+                    const cellVal = row[col.field[0]];
+                    const valueMatch = isValueMatching(filterVal, cellVal, col, row)
+                    if (match && valueMatch !== true) {
+                        match = false;
+                    }
+
+                }
+            }
+
+            if (match) {
+                return row;
+            }
+
+
+
+        }
+
+
+    }
+
+
 
 
 
@@ -351,16 +497,22 @@ export function ArchiveTable({ serviceName, handleSelection, data, selectedRow, 
                             {data.cols.map(col =>
                                 <Column width={col.width} key={col.field}>
 
-                                    {col.header}
+                                    <div>
+                                        {col.header}
+                                    </div>
 
-                                    {col.sortable && <TableSort applySort={applySort} sortColumn={sortColumn} key={col.header} column={col} />}
+                                    <div style={{ display: 'flex' }}>
 
+                                        {col && col.filter && <TableFilter key={`${col.header}` + '_filter'} applyFilter={applyFilter} column={col} />}
+
+                                        {col && col.sortable && <TableSort applySort={applySort} sortColumn={sortColumn} key={col.header} column={col} />}
+                                    </div>
                                 </Column>)}
                         </Thead>
                     </thead>
 
                     <Tbody ref={tableRef}>
-                        {data.rows.sort((a, b) => archiveTableSort(a, b)).map((row, rowIndex) =>
+                        {data.rows.filter(row => archiveTableFilter(row)).sort((a, b) => archiveTableSort(a, b)).map((row, rowIndex) =>
                             <Trow onClick={() => handleRow(row)} id={row.id} key={row.id} selectedid={selectedRow?.id}>
                                 {data.cols.map((col, colIndex) =>
 

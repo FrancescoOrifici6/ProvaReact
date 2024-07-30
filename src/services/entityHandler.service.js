@@ -43,6 +43,8 @@ export const colsSchema = {
             editable: true,
             type: 'text',
             sortable: true,
+            filter: true,
+            filterValue: ''
         },
         {
             header: 'Data',

@@ -3,6 +3,7 @@ import axios from "axios";
 import { columnsDispatcher, entityDispatcherUrl } from "../services/entityHandler.service";
 
 export const useGetArchiveData = (entity) => {
+
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [addRow, setAddRow] = useState(false);
@@ -53,6 +54,31 @@ export const useGetArchiveData = (entity) => {
                 console.log('colsdata', colData);
             }
 
+        }
+
+    }
+
+
+
+  
+
+
+
+    const storeColumnFilter = (updateColumnFilter) => {
+
+        if (updateColumnFilter) {
+            const clone = data;
+
+            // aggiorno le colonne in modo da poter salvare il valore del filtro modificato
+            for (let col of clone.cols) {
+
+                if (col.header === updateColumnFilter.header) {
+                    col = Object.assign(col, col, updateColumnFilter);
+                }
+
+            }
+
+            setData(clone);
         }
 
     }
@@ -134,5 +160,5 @@ export const useGetArchiveData = (entity) => {
 
     }
 
-    return { data, loading, dataUpdate, addingRow };
+    return { data, loading, dataUpdate, addingRow , storeColumnFilter };
 };

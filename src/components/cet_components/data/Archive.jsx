@@ -38,7 +38,7 @@ export function Archive({ entity }) {
 
 
 
-  const { data, dataUpdate , addingRow } = useGetArchiveData(entity);
+  const { data, dataUpdate , addingRow , storeColumnFilter} = useGetArchiveData(entity);
 
 
 
@@ -73,8 +73,8 @@ export function Archive({ entity }) {
           updateItem={updateItem}
           addRow={true}
           addingRow={addingRow}
-
-        />
+          updateColumns={storeColumnFilter}
+          />
 
         <ArchiveDetails colsData={data.cols} archiveSelection={selectedRowItem} updateItem={updateItem} service={entity}></ArchiveDetails>
 
