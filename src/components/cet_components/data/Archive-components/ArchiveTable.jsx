@@ -506,6 +506,7 @@ export function ArchiveTable({ serviceName, handleSelection, data, selectedRow, 
                                         {col && col.filter && <TableFilter key={`${col.header}` + '_filter'} applyFilter={applyFilter} column={col} />}
 
                                         {col && col.sortable && <TableSort applySort={applySort} sortColumn={sortColumn} key={col.header} column={col} />}
+                                        
                                     </div>
                                 </Column>)}
                         </Thead>

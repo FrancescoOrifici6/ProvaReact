@@ -60,7 +60,7 @@ export const useGetArchiveData = (entity) => {
 
 
 
-  
+
 
 
 
@@ -70,10 +70,18 @@ export const useGetArchiveData = (entity) => {
             const clone = data;
 
             // aggiorno le colonne in modo da poter salvare il valore del filtro modificato
-            for (let col of clone.cols) {
+            // for (let col of clone.cols) {
 
+            //     if (col.header === updateColumnFilter.header) {
+            //         col = Object.assign(col, col, updateColumnFilter);
+            //     }
+
+            // }
+
+            for (let index = 0; index < data.cols.length; index++) {
+                const col = data.cols[index];
                 if (col.header === updateColumnFilter.header) {
-                    col = Object.assign(col, col, updateColumnFilter);
+                    data.cols[index] = updateColumnFilter;
                 }
 
             }
@@ -160,5 +168,5 @@ export const useGetArchiveData = (entity) => {
 
     }
 
-    return { data, loading, dataUpdate, addingRow , storeColumnFilter };
+    return { data, loading, dataUpdate, addingRow, storeColumnFilter };
 };

@@ -63,6 +63,8 @@ export const colsSchema = {
             editable: true,
             type: 'select',
             sortable: true,
+            filter: true,
+            filterValue: ''
 
         },
         {
